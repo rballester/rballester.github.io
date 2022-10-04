@@ -417,9 +417,10 @@
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
 <ul>
-<li>Bayesian networks are often learned from data</li>
-<li>Learned parameters <span class="math inline">\(\pmb{\theta}\)</span> in the conditional probability tables (CPT) may be uncertain</li>
+<li class="fragment"><p>Bayesian networks are often learned from data</p></li>
+<li class="fragment"><p>Learned parameters <span class="math inline">\(\pmb{\theta}\)</span> in the conditional probability tables (CPT) may be uncertain</p></li>
 </ul>
+<div class="fragment">
 <table>
 <colgroup>
 <col style="width: 28%">
@@ -456,25 +457,26 @@
 </tr>
 </tbody>
 </table>
+</div>
 <ul>
-<li>Imagine a quantity of interest <span class="math inline">\(g = P(Y_O = y_O \; | \; \pmb{Y}_E = \pmb{y}_E)\)</span> arising from the BN <!-- - What is the probability of $Y_O = y_O$ given $\pmb{Y}_E = \pmb{y}_E$? -->
+<li class="fragment">Imagine a quantity of interest <span class="math inline">\(g = P(Y_O = y_O \; | \; \pmb{Y}_E = \pmb{y}_E)\)</span> arising from the BN
 <ul>
-<li><span class="math inline">\(Y_O\)</span> is an output variable of interest; <span class="math inline">\(\pmb{Y}_E\)</span> are optional conditional evidential variables</li>
-<li>E.g. <span class="math inline">\(g =\)</span> <em>“What is the risk of humanitarian disaster, if there’s a large flood?”</em></li>
+<li class="fragment"><span class="math inline">\(Y_O\)</span> is an output variable of interest; <span class="math inline">\(\pmb{Y}_E\)</span> are optional conditional evidential variables</li>
+<li class="fragment">E.g. <span class="math inline">\(g =\)</span> <em>“What is the risk of humanitarian disaster, if there’s a large flood?”</em></li>
 </ul></li>
-<li>Sensitivity analysis question: how does <span class="math inline">\(g(\pmb{\theta})\)</span> behave as <span class="math inline">\(\pmb{\theta}\)</span> changes?</li>
+<li class="fragment">Sensitivity analysis question: how does <span class="math inline">\(g(\pmb{\theta})\)</span> behave as <span class="math inline">\(\pmb{\theta}\)</span> changes?</li>
 </ul>
 </section>
 <section id="proportional-covariation" class="slide level2">
 <h2>Proportional Covariation</h2>
 <!-- - Consider two entries $\theta_i$ and $\theta_j$ of a CPT for the same configuration of the parents -->
 <ul>
-<li>Let <span class="math inline">\(\theta_i, \theta_{j_1}, \dots, \theta_{j_n}\)</span> be the probabilities along a CPT row (must sum to 1)</li>
-<li>Problem: when we vary <span class="math inline">\(\theta_i\)</span> from its initial value <span class="math inline">\(\theta_i^0\)</span>, the row will not sum to 1! <!-- - We want to vary $\theta_i$  --></li>
-<li>To fix that, proportional covariation <span class="citation" data-cites="laskey1995sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Laskey 1995</a>)</span> adjusts each <span class="math inline">\(\theta_{j_k}\)</span> as <span class="math display">\[\theta_{j_k}(\theta_i) = \frac{1-\theta_i}{1-\theta^0_i}\theta^0_{j_k}, \; k = 1, \dots, n\]</span></li>
-<li>If <span class="math inline">\(\theta_i\)</span> grows, everything else in the row shrinks proportionally</li>
-<li>PC is theoretically a natural choice <span class="citation" data-cites="leonelli2018geometric">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Leonelli and Riccomagno 2018</a>)</span></li>
-<li>For each <span class="math inline">\(\theta_i\)</span>, PC yields an <span class="math inline">\(f\)</span>: <span class="math display">\[f(\theta_i) = g(\theta_i, \theta_{j_1}(\theta_i), \dots, \theta_{j_n}(\theta_i))\]</span> <!-- - We assume it from now on in this presentation --></li>
+<li class="fragment"><p>Let <span class="math inline">\(\theta_i, \theta_{j_1}, \dots, \theta_{j_n}\)</span> be the probabilities along a CPT row (must sum to 1)</p></li>
+<li class="fragment"><p>Problem: when we vary <span class="math inline">\(\theta_i\)</span> from its initial value <span class="math inline">\(\theta_i^0\)</span>, the row will not sum to 1! <!-- - We want to vary $\theta_i$  --></p></li>
+<li class="fragment"><p>To fix that, proportional covariation <span class="citation" data-cites="laskey1995sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Laskey 1995</a>)</span> adjusts each <span class="math inline">\(\theta_{j_k}\)</span> as <span class="math display">\[\theta_{j_k}(\theta_i) = \frac{1-\theta_i}{1-\theta^0_i}\theta^0_{j_k}, \; k = 1, \dots, n\]</span></p></li>
+<li class="fragment"><p>If <span class="math inline">\(\theta_i\)</span> grows, everything else in the row shrinks proportionally</p></li>
+<li class="fragment"><p>PC is theoretically a natural choice <span class="citation" data-cites="leonelli2018geometric">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Leonelli and Riccomagno 2018</a>)</span></p></li>
+<li class="fragment"><p>For each <span class="math inline">\(\theta_i\)</span>, PC yields an <span class="math inline">\(f\)</span>: <span class="math display">\[f(\theta_i) = g(\theta_i, \theta_{j_1}(\theta_i), \dots, \theta_{j_n}(\theta_i))\]</span> <!-- - We assume it from now on in this presentation --></p></li>
 </ul>
 </section>
 <section id="sensitivity-values" class="slide level2">
@@ -486,27 +488,27 @@ f_{O \cap E}(\pmb{\theta}) := P(Y_O=y_O \cap \pmb{Y}_E=\pmb{y}_E; \pmb{\theta}) 
 f_{O|E}(\pmb{\theta}) := f_O(\pmb{\theta}) / f_{O \cap E}(\pmb{\theta})
 \end{cases} -->
 <ul>
-<li>Let <span class="math inline">\(f_{O|E}(\theta_i) := P(Y_O=y_O\;|\; \pmb{Y}_E=\pmb{y}_E; \theta_i) = \frac{P(Y_O=y_O; \theta_i)}{P(Y_O=y_O \cap \pmb{Y}_E=\pmb{y}_E; \theta_i)} = \frac{f_O(\theta_i)}{f_{O \cap E}(\theta_i)}\)</span></li>
-<li>The <em>sensitivity value</em> <span class="citation" data-cites="van2007sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Gaag, Renooij, and Coupé 2007</a>)</span> of a parameter <span class="math inline">\(\theta_i\)</span> is <span class="math inline">\(|f'_{O|E}(\theta_i)|\)</span></li>
-<li>The larger this value, the more our QoI is sensitive to changes in <span class="math inline">\(\theta_i\)</span></li>
-<li>It is a type of <em>local</em> sensitivity analysis</li>
-<li>Can be computed with e.g.&nbsp;finite differences
+<li class="fragment">Let <span class="math inline">\(f_{O|E}(\theta_i) := P(Y_O=y_O\;|\; \pmb{Y}_E=\pmb{y}_E; \theta_i) = \frac{P(Y_O=y_O; \theta_i)}{P(Y_O=y_O \cap \pmb{Y}_E=\pmb{y}_E; \theta_i)} = \frac{f_O(\theta_i)}{f_{O \cap E}(\theta_i)}\)</span></li>
+<li class="fragment">The <em>sensitivity value</em> <span class="citation" data-cites="van2007sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Gaag, Renooij, and Coupé 2007</a>)</span> of a parameter <span class="math inline">\(\theta_i\)</span> is <span class="math inline">\(|f'_{O|E}(\theta_i)|\)</span></li>
+<li class="fragment">The larger this value, the more our QoI is sensitive to changes in <span class="math inline">\(\theta_i\)</span></li>
+<li class="fragment">It is a type of <em>local</em> sensitivity analysis</li>
+<li class="fragment">Can be computed with e.g.&nbsp;finite differences
 <ul>
-<li>For example Euler: <span class="math display">\[\frac{|f_{O|E}(\theta_i + h) - f_{O|E}(\theta_i)|}{h}\]</span></li>
-<li>Requires two inference operations</li>
+<li class="fragment">For example Euler: <span class="math display">\[\frac{|f_{O|E}(\theta_i + h) - f_{O|E}(\theta_i)|}{h}\]</span></li>
+<li class="fragment">Requires two inference operations</li>
 </ul></li>
 </ul>
 </section>
 <section id="computing-hyperbola-parameters-c_1-c_2-c_3-c_4" class="slide level2">
 <h2>Computing Hyperbola Parameters <span class="math inline">\(c_1, c_2, c_3, c_4\)</span></h2>
 <ul>
-<li><p>For unconditional probabilities, <span class="math inline">\(f\)</span> is just a straight line: <span class="math inline">\(f_O(\theta_i)=c_1\theta_i+c_2\)</span> where <span class="math display">\[
+<li class="fragment"><p>For unconditional probabilities, <span class="math inline">\(f\)</span> is just a straight line: <span class="math inline">\(f_O(\theta_i)=c_1\theta_i+c_2\)</span> where <span class="math display">\[
 \begin{cases}
   c_1 = f_O'(\theta_i^0) \\
   c_2 = f_O(\theta_i^0) - c_1 \theta_i^0.
 \end{cases}
 \]</span></p></li>
-<li><p>For conditional probabilities, <span class="math inline">\(f\)</span> is the quotient of two lines (hyperbola) <span class="citation" data-cites="coupe2002properties">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Coupé and Gaag 2002</a>)</span>: <span class="math display">\[f_{O|E}(\theta_i) = \frac{f_O(\theta_i)}{f_{O \cap E}(\theta_i)} = \frac{c_1\theta_i+c_2}{c_3\theta_i+c_4}\]</span> amd then we can get the sensitivity value as <span class="math display">\[|f_{O|E}^{'}(\theta_i^0)| = \frac{|c_1 c_4 - c_2 c_3|}{(c_3\theta_i^0+c_4)^2}\]</span></p></li>
+<li class="fragment"><p>For conditional probabilities, <span class="math inline">\(f\)</span> is the quotient of two lines (hyperbola) <span class="citation" data-cites="coupe2002properties">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Coupé and Gaag 2002</a>)</span>: <span class="math display">\[f_{O|E}(\theta_i) = \frac{f_O(\theta_i)}{f_{O \cap E}(\theta_i)} = \frac{c_1\theta_i+c_2}{c_3\theta_i+c_4}\]</span> amd then we can get the sensitivity value as <span class="math display">\[|f_{O|E}^{'}(\theta_i^0)| = \frac{|c_1 c_4 - c_2 c_3|}{(c_3\theta_i^0+c_4)^2}\]</span></p></li>
 </ul>
 </section>
 <section id="vertex-proximity" class="slide level2">
@@ -514,26 +516,30 @@ f_{O|E}(\pmb{\theta}) := f_O(\pmb{\theta}) / f_{O \cap E}(\pmb{\theta})
 <div class="columns">
 <div class="column" style="width:70%;">
 <ul>
-<li><p>Define <span class="math display">\[
+<li class="fragment"><p>Define <span class="math display">\[
 \begin{cases}
 s := -c_4 / c_3 \\
 t := c_1 / c_3 \\
 r := c_2 / c_3 + st
 \end{cases}
 \]</span></p></li>
-<li><p>Then, <span class="math inline">\(f_{O|E}(\theta_i) = \frac{r}{\theta_i-s} + t\)</span></p></li>
-<li><p>The <em>vertex proximity</em> <span class="citation" data-cites="van2007sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Gaag, Renooij, and Coupé 2007</a>)</span> is <span class="math inline">\(|\theta_i^0 - \theta_i^v|\)</span>, where <span class="math display">\[
-\begin{equation}
-  \theta_i^v = \left\{
-  \begin{array}{ll}
-  s+\sqrt{|r|}, &amp; \mbox{if } s &lt;0, \\
-  s - \sqrt{|r|}, &amp; \mbox{if } s &gt; 0.
-  \end{array}
-  \right.
-\end{equation}
-\]</span></p></li>
+<li class="fragment"><p>Then, <span class="math inline">\(f_{O|E}(\theta_i) = \frac{r}{\theta_i-s} + t\)</span></p></li>
+<li class="fragment"><p>The <em>vertex proximity</em> <span class="citation" data-cites="van2007sensitivity">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Gaag, Renooij, and Coupé 2007</a>)</span> is <span class="math inline">\(|\theta_i^0 - \theta_i^v|\)</span>, where</p></li>
 </ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{equation}
+    \theta_i^v = \left\{
+    \begin{array}{ll}
+    s+\sqrt{|r|}, &amp; \mbox{if } s &lt;0, \\
+    s - \sqrt{|r|}, &amp; \mbox{if } s &gt; 0.
+    \end{array}
+    \right.
+\end{equation}
+\]</span></p>
+</div>
 </div><div class="column" style="width:30%;">
+<div class="fragment">
 <div class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <p><img data-src="slides_files/figure-revealjs/cell-2-output-1.png" width="423" height="429"></p>
@@ -541,8 +547,9 @@ r := c_2 / c_3 + st
 </div>
 </div>
 </div>
+</div>
 <ul>
-<li>Being close to the vertex <span class="math inline">\(\Rightarrow\)</span> large changes in <span class="math inline">\(\theta_i\)</span> may have huge impact (even if <span class="math inline">\(|f'(\theta_i)|\)</span> is small)</li>
+<li class="fragment">Being close to the vertex <span class="math inline">\(\Rightarrow\)</span> large changes in <span class="math inline">\(\theta_i\)</span> may have huge impact (even if <span class="math inline">\(|f'(\theta_i)|\)</span> is small)</li>
 </ul>
 </section>
 <section>
@@ -553,60 +560,78 @@ r := c_2 / c_3 + st
 <section id="proposed-method-yodo" class="slide level2">
 <h2>Proposed Method: YODO</h2>
 <ol type="1">
-<li>Compute <span class="math inline">\(\nabla g_O\)</span></li>
-<li>For every <span class="math inline">\(\theta_i\)</span>, derive <span class="math inline">\(f'_O(\theta_i)\)</span> and obtain <span class="math inline">\(c_1, c_2\)</span></li>
-<li>Do analogously with <span class="math inline">\(g_{O \cap E}(\pmb{\theta}) := P(Y_O = y_O \cap \pmb{Y}_E=\pmb{y}_E; \pmb{\theta})\)</span> to obtain <span class="math inline">\(c_3, c_4\)</span></li>
-<li>Compute sensitivity metrics using <span class="math inline">\(c_1, \dots, c_4\)</span></li>
+<li class="fragment">Compute <span class="math inline">\(\nabla g_O\)</span></li>
+<li class="fragment">For every <span class="math inline">\(\theta_i\)</span>, derive <span class="math inline">\(f'_O(\theta_i)\)</span> and obtain <span class="math inline">\(c_1, c_2\)</span></li>
+<li class="fragment">Do analogously with <span class="math inline">\(g_{O \cap E}(\pmb{\theta}) := P(Y_O = y_O \cap \pmb{Y}_E=\pmb{y}_E; \pmb{\theta})\)</span> to obtain <span class="math inline">\(c_3, c_4\)</span></li>
+<li class="fragment">Compute sensitivity metrics using <span class="math inline">\(c_1, \dots, c_4\)</span></li>
 </ol>
 </section>
 <section id="computing-nabla-g-i" class="slide level2">
 <h2>Computing <span class="math inline">\(\nabla g\)</span> (I)</h2>
 <ul>
-<li>We moralize the BN into a Markov Random Field</li>
+<li class="fragment">We moralize the BN into a Markov Random Field</li>
 </ul>
-
-<img data-src="moralization.png" class="r-stretch quarto-figure-center"></section>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="moralization.png"></p>
+</figure>
+</div>
+</div>
+</section>
 <section id="computing-nabla-g-ii" class="slide level2">
 <h2>Computing <span class="math inline">\(\nabla g\)</span> (II)</h2>
 <ul>
-<li>We encode the evidence <span class="math inline">\(Y_O = y_O\)</span> (and <span class="math inline">\(\pmb{Y}_E = \pmb{y}_E\)</span> if needed) in the MRF potentials</li>
-<li>How? We set to 0 the appropriate entries</li>
-<li>Example (parent = <span class="math inline">\(Y_1\)</span>, child = <span class="math inline">\(Y_2\)</span>, we set <span class="math inline">\(Y_2 = 3\)</span>):</li>
+<li class="fragment">We encode the evidence <span class="math inline">\(Y_O = y_O\)</span> (and <span class="math inline">\(\pmb{Y}_E = \pmb{y}_E\)</span> if needed) in the MRF potentials</li>
+<li class="fragment">How? We set to 0 the appropriate entries</li>
+<li class="fragment">Example (parent = <span class="math inline">\(Y_1\)</span>, child = <span class="math inline">\(Y_2\)</span>, we set <span class="math inline">\(Y_2 = 3\)</span>):</li>
 </ul>
-
-<img data-src="set_evidence.png" class="r-stretch quarto-figure-center"></section>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="set_evidence.png"></p>
+</figure>
+</div>
+</div>
+</section>
 <section id="computing-nabla-g-iii" class="slide level2">
 <h2>Computing <span class="math inline">\(\nabla g\)</span> (III)</h2>
 <ul>
-<li>We do inference via variable elimination: eliminate all nodes to get a scalar <span class="math inline">\(x\)</span></li>
+<li class="fragment">We do inference via variable elimination: eliminate all nodes to get a scalar <span class="math inline">\(x\)</span></li>
 </ul>
-
-<img data-src="marginalization.png" class="r-stretch quarto-figure-center"><p>(<em>forward pass</em> in machine learning)</p>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="marginalization.png"></p>
+</figure>
+</div>
+<p>(<em>forward pass</em> in machine learning)</p>
+</div>
 </section>
 <section id="computing-nabla-g-iv" class="slide level2">
 <h2>Computing <span class="math inline">\(\nabla g\)</span> (IV)</h2>
 <ul>
-<li>We backpropagate to obtain the gradient w.r.t. of <span class="math inline">\(g\)</span> all <span class="math inline">\(\pmb{\theta}\)</span>
+<li class="fragment">We backpropagate to obtain the gradient w.r.t. of <span class="math inline">\(g\)</span> all <span class="math inline">\(\pmb{\theta}\)</span>
 <ul>
-<li><em>Backward pass</em> in machine learning</li>
+<li class="fragment"><em>Backward pass</em> in machine learning</li>
 </ul></li>
-<li>Computed via chain rule to machine precision (not numerical or symbolic differentiation)</li>
-<li>Cost: same complexity as the inference step <span class="citation" data-cites="liaoDifferentiableProgramming2019">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Liao et al. 2019</a>)</span></li>
-<li>Software-wise very easy thanks to automatic differentiation
+<li class="fragment">Computed via chain rule to machine precision (not numerical or symbolic differentiation)</li>
+<li class="fragment">Cost: same complexity as the inference step <span class="citation" data-cites="liaoDifferentiableProgramming2019">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Liao et al. 2019</a>)</span></li>
+<li class="fragment">Software-wise very easy thanks to automatic differentiation
 <ol type="1">
-<li>Compute your QoI <code>x</code> normally</li>
-<li>Call a function like <code>x.backward()</code></li>
-<li>The gradient entries are created side-by-side the original tensors (CPTs in our case)</li>
+<li class="fragment">Compute your QoI <code>x</code> normally</li>
+<li class="fragment">Call a function like <code>x.backward()</code></li>
+<li class="fragment">The gradient entries are created side-by-side the original tensors (CPTs in our case)</li>
 </ol></li>
 </ul>
 </section>
 <section id="last-finding-ftheta_i-from-nabla-g" class="slide level2">
 <h2>Last: Finding <span class="math inline">\(f'(\theta_i)\)</span> from <span class="math inline">\(\nabla g\)</span></h2>
 <ul>
-<li>Recall that <span class="math inline">\(f\)</span> is <span class="math display">\[f(\theta_i) = g(\theta_i, \theta_{j_1}(\theta_i), \dots, \theta_{j_n}(\theta_i))\]</span> <!-- where $\theta_{j_k}(\theta_i) = \frac{1-\theta_i}{1-\theta^0_i}\theta^0_j$ --></li>
-<li>Then (generalized chain rule) we have <span class="math display">\[  f'(\theta_i) = \frac{\partial g}{\partial \theta_i} - \frac{(\partial g / \partial \theta_{j_1}) \cdot \theta_{j_1}^0 + \dots + (\partial g / \partial \theta_{j_n}) \cdot \theta_{j_n}^0}{1 - \theta_i^0}\]</span></li>
-<li>Note: the partials of <span class="math inline">\(g\)</span> do not depend on the specific CPT entry <span class="math inline">\(\theta_i\)</span> we consider</li>
-<li>We only need to compute <span class="math inline">\(\nabla g\)</span> once</li>
+<li class="fragment">Recall that <span class="math inline">\(f\)</span> is <span class="math display">\[f(\theta_i) = g(\theta_i, \theta_{j_1}(\theta_i), \dots, \theta_{j_n}(\theta_i))\]</span> <!-- where $\theta_{j_k}(\theta_i) = \frac{1-\theta_i}{1-\theta^0_i}\theta^0_j$ --></li>
+<li class="fragment">Then (generalized chain rule) we have <span class="math display">\[  f'(\theta_i) = \frac{\partial g}{\partial \theta_i} - \frac{(\partial g / \partial \theta_{j_1}) \cdot \theta_{j_1}^0 + \dots + (\partial g / \partial \theta_{j_n}) \cdot \theta_{j_n}^0}{1 - \theta_i^0}\]</span></li>
+<li class="fragment">Note: the partials of <span class="math inline">\(g\)</span> do not depend on the specific CPT entry <span class="math inline">\(\theta_i\)</span> we consider</li>
+<li class="fragment">We only need to compute <span class="math inline">\(\nabla g\)</span> once</li>
 </ul>
 <!-- :::{.callout-note}
 The partials of $g$ do not depend on the specific CPT entry $\theta_i$ we're looking at $\rightarrow$ only need to compute them once
@@ -615,10 +640,12 @@ The partials of $g$ do not depend on the specific CPT entry $\theta_i$ we're loo
 <section>
 <section id="experiments" class="title-slide slide level1 center">
 <h1>Experiments</h1>
+<div>
 <ul>
 <li>One <a href="https://github.com/rballester/yodo/blob/main/networks/bn_pgm_free2.bif">learned network</a> (21 nodes)</li>
 <li>10 Bayesian networks <a href="https://www.bnlearn.com/bnrepository/">from bnlearn</a> (up to 441 nodes)</li>
 </ul>
+</div>
 </section>
 <section id="humanitarian-crises-network" class="slide level2">
 <h2>Humanitarian Crises Network</h2>
@@ -626,6 +653,7 @@ The partials of $g$ do not depend on the specific CPT entry $\theta_i$ we're loo
 <img data-src="Rplot.png" class="r-stretch quarto-figure-center"></section>
 <section id="results-humanitarian-crises" class="slide level2">
 <h2>Results (Humanitarian Crises)</h2>
+<div>
 <ul>
 <li>Top 15 parameters for <span class="math inline">\(f = P(\mbox{RISK} = \mbox{high} \;|\; \mbox{EARTHQUAKE} = \mbox{high})\)</span>:</li>
 </ul>
@@ -638,32 +666,33 @@ The partials of $g$ do not depend on the specific CPT entry $\theta_i$ we're loo
 <p><img data-src="slides_files/figure-revealjs/cell-3-output-1.png" width="950" height="470"></p>
 </div>
 </div>
+</div>
 <ul>
-<li>The full computation (183 parameters) took 0.055s</li>
+<li class="fragment">The full computation (183 parameters) took 0.055s</li>
 </ul>
 </section>
 <section id="results-bnlearn-models" class="slide level2">
 <h2>Results (bnlearn Models)</h2>
 
 <img data-src="results_table.png" class="r-stretch quarto-figure-center"><ul>
-<li>Speed-up vs.&nbsp;finite differences: 2 - 4 orders of magnitude</li>
+<li class="fragment">Speed-up vs.&nbsp;finite differences: 2 - 4 orders of magnitude</li>
 </ul>
 </section>
 <section id="open-source-implementation" class="slide level2">
 <h2>Open-source Implementation</h2>
 <ul>
-<li>Available in Python: <a href="https://github.com/rballester/yodo">github.com/rballester/yodo</a></li>
-<li>Dependencies: <!-- - [[NumPy](https://www.numpy.org)]{.smallcaps} -->
+<li class="fragment">Available in Python: <a href="https://github.com/rballester/yodo">github.com/rballester/yodo</a></li>
+<li class="fragment">Dependencies: <!-- - [[NumPy](https://www.numpy.org)]{.smallcaps} -->
 <ul>
-<li><span class="smallcaps"><a href="https://pgmpy.org/">pgmpy</a></span> for reading and moralizing Bayesian networks</li>
-<li><span class="smallcaps"><a href="https://optimized-einsum.readthedocs.io/en/stable/">opt_einsum</a></span> for efficient tensor contraction
+<li class="fragment"><span class="smallcaps"><a href="https://pgmpy.org/">pgmpy</a></span> for reading and moralizing Bayesian networks</li>
+<li class="fragment"><span class="smallcaps"><a href="https://optimized-einsum.readthedocs.io/en/stable/">opt_einsum</a></span> for efficient tensor contraction
 <ul>
-<li>Equivalent to variable elimination <span class="citation" data-cites="RS:18">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Robeva and Seigal 2018</a>)</span></li>
+<li class="fragment">Equivalent to variable elimination <span class="citation" data-cites="RS:18">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Robeva and Seigal 2018</a>)</span></li>
 </ul></li>
-<li><span class="smallcaps"><a href="https://pytorch.org/">PyTorch</a></span> as autodifferentiation backend for manipulating tensors</li>
-<li><span class="smallcaps"><a href="https://github.com/rballester/gmtorch">gmtorch</a></span> for operations with Markov random fields</li>
+<li class="fragment"><span class="smallcaps"><a href="https://pytorch.org/">PyTorch</a></span> as autodifferentiation backend for manipulating tensors</li>
+<li class="fragment"><span class="smallcaps"><a href="https://github.com/rballester/gmtorch">gmtorch</a></span> for operations with Markov random fields</li>
 </ul></li>
-<li>Upcoming: <a href="https://github.com/manueleleonelli/bnmonitor">github.com/manueleleonelli/bnmonitor</a></li>
+<li class="fragment">Upcoming: <a href="https://github.com/manueleleonelli/bnmonitor">github.com/manueleleonelli/bnmonitor</a></li>
 </ul>
 </section></section>
 <section>
@@ -671,10 +700,10 @@ The partials of $g$ do not depend on the specific CPT entry $\theta_i$ we're loo
 <h1>Takeaways</h1>
 <!-- - Thanks to modern tools, evaluation is automatic and does not depend on the graph topology -->
 <ul>
-<li>Autodifferentiation is very promising for local sensitivity analysis</li>
-<li>Ability to process huge graphs in seconds</li>
-<li>Extensible to other inference algorithms, as long as they are differentiable</li>
-<li>Bridges between PGMs and tensor networks are worth exploring</li>
+<li class="fragment">Autodifferentiation is very promising for local sensitivity analysis</li>
+<li class="fragment">Ability to process huge graphs in seconds</li>
+<li class="fragment">Extensible to other inference algorithms, as long as they are differentiable</li>
+<li class="fragment">Bridges between PGMs and tensor networks are worth exploring</li>
 </ul>
 </section>
 <section id="thank-you-for-listening" class="slide level2 smaller scrollable">
@@ -717,13 +746,20 @@ Robeva, Elina, and Anna Seigal. 2018. <span>“<span class="nocase">Duality of g
 </div>
 </div>
 <p><br></p>
+<div class="fragment">
+<!-- -->
 <h3 id="ie-university-is-hiring">IE University is Hiring!</h3>
 <ul>
-<li>Tenure-track positions in Computer Science and Information Technology</li>
-<li>Main campus in Madrid, Spain</li>
+<li><p>Tenure-track positions in Computer Science and Information Technology</p></li>
+<li><p>Main campus in Madrid, Spain</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="qr.png" style="width:20.0%"></p>
+</figure>
+</div></li>
 </ul>
-
-<img data-src="qr.png" style="width:55.0%" class="r-stretch quarto-figure-left"><p><a href="https://apply.interfolio.com/107871">https://apply.interfolio.com/107871</a></p>
+<p><a href="https://apply.interfolio.com/107871">https://apply.interfolio.com/107871</a></p>
+</div>
 <!-- ## Columns Test
 
 :::: {.columns}
@@ -923,7 +959,7 @@ Left column
         // specified using percentage units.
         width: 1700,
 
-        height: 950,
+        height: 960,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
