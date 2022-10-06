@@ -409,7 +409,7 @@
 <section id="title-slide" class="center">
   <h1 class="title">You Only Derive Once (YODO):</h1>
   <p class="subtitle"><strong>Automatic Differentiation for Efficient Sensitivity Analysis in Bayesian Networks</strong></p>
-  <p class="author"><a href="https://scholar.google.es/citations?user=zSdMQ0gAAAAJ">Rafael Ballester-Ripoll</a> &amp; <a href="https://manueleleonelli.github.io/">Manuele Leonelli</a></p>
+  <p class="author"><a href="https://scholar.google.es/citations?user=zSdMQ0gAAAAJ"><b>Rafael Ballester-Ripoll</b></a> &amp; <a href="https://manueleleonelli.github.io/">Manuele Leonelli</a></p>
   <p class="institute">IE University, Madrid (Spain)</p>
   <p class="date"><em>11th International Conference on Probabilistic Graphical Models</em> <br> Almería (Spain), 7th October 2022</p>
 </section>
@@ -605,15 +605,15 @@ r := c_2 / c_3 + st
 <p><img data-src="marginalization.png"></p>
 </figure>
 </div>
-<p>(<em>forward pass</em> in machine learning)</p>
+<p>(<em>forward pass</em> in neural networks)</p>
 </div>
 </section>
 <section id="computing-nabla-g-iv" class="slide level2">
 <h2>Computing <span class="math inline">\(\nabla g\)</span> (IV)</h2>
 <ul>
-<li class="fragment">We backpropagate to obtain the gradient w.r.t. of <span class="math inline">\(g\)</span> all <span class="math inline">\(\pmb{\theta}\)</span>
+<li class="fragment">We backpropagate to obtain the gradient of <span class="math inline">\(g\)</span> w.r.t. all <span class="math inline">\(\pmb{\theta}\)</span>
 <ul>
-<li class="fragment"><em>Backward pass</em> in machine learning</li>
+<li class="fragment"><em>Backward pass</em> in neural networks</li>
 </ul></li>
 <li class="fragment">Computed via chain rule to machine precision (not numerical or symbolic differentiation)</li>
 <li class="fragment">Cost: same complexity as the inference step <span class="citation" data-cites="liaoDifferentiableProgramming2019">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Liao et al. 2019</a>)</span></li>
