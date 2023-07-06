@@ -151,7 +151,7 @@
     "href": "slides.html#section",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "",
-    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution \\(\\sim\\) quickly\n\nOnce it finds a basin, it converges fast to its local minimum\n\n\nLimitations\n\nThe method struggles with complicated landscape (archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
+    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution \\(\\sim\\) quickly\n\nOnce it finds a basin, it converges fast to its local minimum\n\nBest for open spaces in the sea\n\nLimitations\n\nThe method struggles with complicated landscape (archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
   },
   {
     "objectID": "slides.html#section-1",
@@ -166,5 +166,19 @@
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Thank You For Listening",
     "text": "Thank You For Listening\n\n\n\nArnold, Dirk V., and Nikolaus Hansen. 2012. “A (1+1)-CMA-ES for Constrained Optimisation.” In Proceedings of the 14th Annual Conference on Genetic and Evolutionary Computation, 297–304. GECCO ’12. New York, NY, USA: Association for Computing Machinery. https://doi.org/10.1145/2330163.2330207.\n\n\nBoehm, Wolfgang, and Andreas Müller. 1999. “On de Casteljau’s Algorithm.” Computer Aided Geometric Design 16 (7): 587–605. https://doi.org/https://doi.org/10.1016/S0167-8396(99)00023-0.\n\n\nHansen, Nikolaus, Sibylle D. Müller, and Petros Koumoutsakos. 2003. “Reducing the Time Complexity of the Derandomized Evolution Strategy with Covariance Matrix Adaptation (CMA-ES).” Evolutionary Computation 11 (1): 1–18.\n\n\n\n\n\nIE University is Hiring!\n\nTenure-track positions in Computer Science and Data Science\n\n\n\n\n\n\nhttps://apply.interfolio.com/107871"
+  },
+  {
+    "objectID": "slides.html#example-reparameterization-into-3-points",
+    "href": "slides.html#example-reparameterization-into-3-points",
+    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
+    "section": "Example Reparameterization into 3 Points",
+    "text": "Example Reparameterization into 3 Points"
+  },
+  {
+    "objectID": "slides.html#cma-es-covariance-adaptation",
+    "href": "slides.html#cma-es-covariance-adaptation",
+    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
+    "section": "CMA-ES Covariance Adaptation",
+    "text": "CMA-ES Covariance Adaptation"
   }
 ]
