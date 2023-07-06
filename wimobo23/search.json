@@ -11,7 +11,7 @@
     "href": "slides.html#bézier-curves",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Bézier Curves",
-    "text": "Bézier Curves\n\nControl points \\(\\pmb{c}_0, \\dots, \\pmb{c}_K \\in \\mathbb{R}^2\\)\n\n\\(\\pmb{c}_0\\) is the source\n\\(\\pmb{c}_K\\) is the destination\nWe leave \\(\\pmb{c}_1, \\dots, \\pmb{c}_{K-1}\\) free\n\nGeneral formula \\(f(t) = (x(t), y(t)) = \\sum_{k=0}^K \\binom{K}{k} (1-t)^{K-k} t^k \\pmb{c}_k\\)\nYields smooth curves, very expressive with few degrees of freedom\n\nComputation\n\nWe use De Casteljau’s recurrence (Boehm and Müller 1999): \\(f(t) = \\pmb{c}_0^{(n)}\\), where \\[\\pmb{c}_k^{(i)} := \\begin{cases}\\pmb{c}_k^{(i-1)}(1-t) + \\pmb{c}_{k+1}^{(i-1)} t\\\\ \\pmb{c}_k^{(0)} := \\pmb{c}_k\\end{cases}\\]\n\nNumerically stable"
+    "text": "Bézier Curves\n\nControl points \\(\\pmb{c}_0, \\dots, \\pmb{c}_K \\in \\mathbb{R}^2\\)\n\n\\(\\pmb{c}_0\\) is the source\n\\(\\pmb{c}_K\\) is the destination\nWe leave \\(\\pmb{c}_1, \\dots, \\pmb{c}_{K-1}\\) free\n\nGeneral formula: \\(f(t) = (x(t), y(t)) = \\sum_{k=0}^K \\binom{K}{k} (1-t)^{K-k} t^k \\pmb{c}_k\\)\nYields smooth curves, very expressive with few degrees of freedom\n\nComputation\n\nWe use De Casteljau’s recurrence (Boehm and Müller 1999): \\(f(t) = \\pmb{c}_0^{(n)}\\), where \\[\\pmb{c}_k^{(i)} := \\begin{cases}\\pmb{c}_k^{(i-1)}(1-t) + \\pmb{c}_{k+1}^{(i-1)} t\\\\ \\pmb{c}_k^{(0)} := \\pmb{c}_k\\end{cases}\\]\n\nNumerically stable"
   },
   {
     "objectID": "slides.html#optimizer-cma-es",
@@ -151,7 +151,7 @@
     "href": "slides.html#section",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "",
-    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution \\(\\sim\\) quickly\n\nOnce it finds a basin, it converges fast to its local minimum\n\nBest for open spaces in the sea\n\nLimitations\n\nThe method struggles with complicated landscape (archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
+    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution \\(\\sim\\) quickly\n\nOnce it finds a basin, it converges fast to its local minimum\n\nGood at open spaces in the sea\n\nLimitations\n\nThe method struggles with complicated maps (dense archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
   },
   {
     "objectID": "slides.html#section-1",
