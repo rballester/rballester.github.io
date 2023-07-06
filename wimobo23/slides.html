@@ -384,8 +384,8 @@
 </ul>
 </section>
 <section>
-<section id="our-method" class="title-slide slide level1 center">
-<h1>Our Method</h1>
+<section id="proposed-method" class="title-slide slide level1 center">
+<h1>Proposed Method</h1>
 <ul>
 <li>Top-down route exploration</li>
 <li>Generate full route, score it, optimize it
@@ -398,7 +398,6 @@
 <section id="bézier-curves" class="slide level2">
 <h2>Bézier Curves</h2>
 <ul>
-<li>Yields smooth curves, very expressive with few degrees of freedom</li>
 <li>Control points <span class="math inline">\(\pmb{c}_0, \dots, \pmb{c}_K \in \mathbb{R}^2\)</span>
 <ul>
 <li><span class="math inline">\(\pmb{c}_0\)</span> is the source</li>
@@ -406,7 +405,10 @@
 <li>We leave <span class="math inline">\(\pmb{c}_1, \dots, \pmb{c}_{K-1}\)</span> free</li>
 </ul></li>
 <li>General formula <span class="math inline">\(f(t) = (x(t), y(t)) = \sum_{k=0}^K \binom{K}{k} (1-t)^{K-k} t^k \pmb{c}_k\)</span></li>
-<li><h3 id="computation">Computation</h3></li>
+<li>Yields smooth curves, very expressive with few degrees of freedom</li>
+</ul>
+<h3 id="computation">Computation</h3>
+<ul>
 <li>We use De Casteljau’s recurrence <span class="citation" data-cites="BM:99">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Boehm and Müller 1999</a>)</span>: <span class="math inline">\(f(t) = \pmb{c}_0^{(n)}\)</span>, where <span class="math display">\[\pmb{c}_k^{(i)} := \begin{cases}\pmb{c}_k^{(i-1)}(1-t) + \pmb{c}_{k+1}^{(i-1)} t\\ \pmb{c}_k^{(0)} := \pmb{c}_k\end{cases}\]</span>
 <ul>
 <li>Numerically stable</li>
@@ -419,19 +421,19 @@
 <li>Covariance Matrix Adaptation Evolution Strategy <span class="citation" data-cites="HMK:03">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Hansen, Müller, and Koumoutsakos 2003</a>)</span></li>
 <li>Evolutionary version of gradient descent
 <ul>
-<li>Multiple candidate solutions at each step</li>
-<li>Candidates are added Gaussian noise to help exploration</li>
+<li>Multiple candidate solutions at each step (the <em>population</em>)</li>
+<li>Candidates are added Gaussian noise to help exploration (<em>mutation</em>)</li>
 <li>Derivative-free</li>
 </ul></li>
-<li>We start with some level <span class="math inline">\(\mathcal{N}(f_0, \Sigma_0)\)</span> of noise</li>
+<li>We start with some initial solution <span class="math inline">\(f_0\)</span> and noise <span class="math inline">\(\mathcal{N}(f_0, \Sigma_0)\)</span></li>
 <li>The distribution locally imitates the shape of the score function <span class="math inline">\(f\)</span></li>
-<li>Software: <code>cma</code> package</li>
-<li>Each generation has a whole set of routes that we evaluate at once
+<li>At each generation, we evaluate all population individuals at once
 <ul>
 <li>Good for parallelization</li>
 <li>We compute everything in batched form</li>
 <li>We can evaluate 1’000+ routes per second</li>
 </ul></li>
+<li>Software: Python <code>cma</code> package</li>
 </ul>
 </section>
 <section id="example" class="slide level2">
@@ -442,7 +444,7 @@
 <h2>Trick 1: Land Avoidance</h2>
 <ul>
 <li>Sometimes, the proposed path runs on land</li>
-<li>We heavily penalize invalid segments</li>
+<li>We heavily penalize any distance that is traversed on land</li>
 <li>But: will not always work if there’s a local minimum
 <ul>
 <li>Example: hourglass-shaped land</li>
@@ -458,7 +460,7 @@
 <ul>
 <li>A Bézier path does not have constant speed (blue line)</li>
 <li>For better visualization, we reparameterize the final path into equal-time segments</li>
-<li>Iterative process:</li>
+<li>Iterative process, converges fast:</li>
 </ul>
 
 <img data-src="reparameterization/cancun_charleston_3.png" class="r-stretch quarto-figure-center"></section></section>
@@ -476,7 +478,7 @@
 <li>Static for now (but dynamic is supported)</li>
 <li>Queried using linear interpolation (fast)</li>
 </ul></li>
-<li>We pick <span class="math inline">\(K = 10\)</span> Bézier control points (8 free, 2 fixed) <span class="math inline">\(\Rightarrow\)</span> 16 d.o.f.</li>
+<li>We pick <span class="math inline">\(K: = 10\)</span> Bézier control points (8 free, 2 fixed) <span class="math inline">\(\Rightarrow\)</span> 16 d.o.f.</li>
 <li>CMA-ES population size
 <ul>
 <li>500 at first (exploration phase)</li>
@@ -484,15 +486,15 @@
 </ul></li>
 <li>We stop at 30’000 total function evaluations</li>
 <li>Bézier path resolution: 200 points (199 segments)</li>
-<li>Initial solution <span class="math inline">\(f_0\)</span>: straight line</li>
-<li>We take <span class="math inline">\(\Sigma_0 := \textrm{diag}(\textrm{std}(f_0) / 5)\)</span></li>
+<li>Initial solution <span class="math inline">\(f_0\)</span>: straight line from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span></li>
+<li>We take initial noise strength <span class="math inline">\(\Sigma_0 := \textrm{diag}(\textrm{std}(f_0) / 5)\)</span></li>
 </ul>
 </section>
 <section id="cancun-rightarrow-charleston-s-3" class="slide level2">
 <h2>Cancun <span class="math inline">\(\rightarrow\)</span> Charleston (<span class="math inline">\(s = 3\)</span>)</h2>
 
 <img data-src="optimal_and_geodesic/cancun_charleston.png" class="r-stretch quarto-figure-center"><ul>
-<li>Total time: 116h
+<li>Navigation time: 116h
 <ul>
 <li>7.35% better than geodesic route</li>
 </ul></li>
@@ -502,7 +504,7 @@
 <h2>Charleston <span class="math inline">\(\rightarrow\)</span> Azores (<span class="math inline">\(s = 3\)</span>)</h2>
 
 <img data-src="optimal_and_geodesic/charleston_azores.png" class="r-stretch quarto-figure-center"><ul>
-<li>Total time: 365h
+<li>Navigation time: 365h
 <ul>
 <li>16.8% better than geodesic route</li>
 </ul></li>
@@ -512,7 +514,7 @@
 <h2>Panama <span class="math inline">\(\rightarrow\)</span> Houston (<span class="math inline">\(s = 3\)</span>)</h2>
 
 <img data-src="optimal_and_geodesic/panama_houston.png" class="r-stretch quarto-figure-center"><ul>
-<li>Total time: 221h
+<li>Navigation time: 221h
 <ul>
 <li>9% better than geodesic route</li>
 </ul></li>
@@ -522,7 +524,7 @@
 <h2>Somalia <span class="math inline">\(\rightarrow\)</span> Myanmar (<span class="math inline">\(s = 3\)</span>)</h2>
 
 <img data-src="optimal_and_geodesic/somalia_myanmar.png" class="r-stretch quarto-figure-center"><ul>
-<li>Total time: 527h
+<li>Navigation time: 527h
 <ul>
 <li>4.5% better than geodesic route</li>
 </ul></li>
@@ -547,12 +549,30 @@
 <img data-src="benchmarking/CC_SD_10.png" class="r-stretch quarto-figure-center"><ul>
 <li>We think this makes it easier to find a global optimum</li>
 </ul>
+</section></section>
+<section>
+<section id="convergence" class="title-slide slide level1 center">
+<h1>Convergence</h1>
+
 </section>
 <section id="convergence-for-different-seeds" class="slide level2">
 <h2>Convergence for Different Seeds</h2>
+<p>Charleston <span class="math inline">\(\rightarrow\)</span> Azores, <span class="math inline">\(s = 3\)</span></p>
+
+<img data-src="score_per_fevals/charleston_azores_3.png" class="r-stretch quarto-figure-center"></section>
+<section id="convergence-for-different-seeds-1" class="slide level2">
+<h2>Convergence for Different Seeds</h2>
 <p>Cancun <span class="math inline">\(\rightarrow\)</span> Charleston, <span class="math inline">\(s = 3\)</span></p>
-<p>FIXME</p>
-<!-- ![](score_per_fevals/cancun_charleston.png){fig-align="center"} -->
+
+<img data-src="score_per_fevals/cancun_charleston_3.png" class="r-stretch quarto-figure-center"></section>
+<section id="land-is-tricky" class="slide level2">
+<h2>Land is Tricky</h2>
+
+<img data-src="nile.png" class="r-stretch quarto-figure-center"></section></section>
+<section>
+<section id="vessel-speed" class="title-slide slide level1 center">
+<h1>Vessel Speed</h1>
+
 </section>
 <section id="different-speeds-charleston-rightarrow-azores-s-3" class="slide level2">
 <h2>Different Speeds (Charleston <span class="math inline">\(\rightarrow\)</span> Azores, <span class="math inline">\(s = 3\)</span>)</h2>
@@ -562,6 +582,10 @@
 <h2>Different Speeds (Charleston <span class="math inline">\(\rightarrow\)</span> Azores, <span class="math inline">\(s = 10\)</span>)</h2>
 
 <img data-src="speed_histogram/solution_10.png" class="r-stretch quarto-figure-center"></section>
+<section id="different-speeds-charleston-rightarrow-azores-s-30" class="slide level2">
+<h2>Different Speeds (Charleston <span class="math inline">\(\rightarrow\)</span> Azores, <span class="math inline">\(s = 30\)</span>)</h2>
+
+<img data-src="speed_histogram/solution_30.png" class="r-stretch quarto-figure-center"></section>
 <section id="ground-speed-charleston-rightarrow-azores-s-3" class="slide level2">
 <h2>Ground Speed (Charleston <span class="math inline">\(\rightarrow\)</span> Azores, <span class="math inline">\(s = 3\)</span>)</h2>
 
@@ -580,8 +604,10 @@
 <h3 id="advantages">Advantages</h3>
 <ul>
 <li>CMA-ES offers good balance of exploration and exploitation</li>
-<li>Can find a reasonable solution quickly</li>
+<li>Can find a reasonable solution <span class="math inline">\(\sim\)</span> quickly
+<ul>
 <li>Once it finds a basin, it converges fast to its local minimum</li>
+</ul></li>
 </ul>
 <h3 id="limitations">Limitations</h3>
 <ul>
@@ -592,48 +618,32 @@
 <li>Given a route, it is hard to find control points that (approximately) generate it</li>
 </ul>
 </section>
-<section id="takeaways" class="slide level2">
-<h2>Takeaways</h2>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<h3 id="takeaways">Takeaways</h3>
 <ul>
 <li>“Top-down” route exploration method</li>
 <li>Full candidates are generated at once, then rated</li>
 <li>Black-box style <span class="math inline">\(\Rightarrow\)</span> only a cost function is needed</li>
 <li>Parallelizable and stochastic approach</li>
 </ul>
-</section>
-<section id="future-work" class="slide level2">
-<h2>Future Work</h2>
+<h3 id="future-work">Future Work</h3>
 <ul>
 <li>Better land avoidance</li>
 <li>Optional: add CMA-ES constraints <span class="citation" data-cites="AH:12">(<a href="#/thank-you-for-listening" role="doc-biblioref" onclick="">Arnold and Hansen 2012</a>)</span>
 <ul>
-<li>Example: “we want to reach the destination during a weekday, not weekend”</li>
+<li>Example: <em>“we want to reach the destination during a weekday, not weekend”</em></li>
 </ul></li>
 <li>Benchmark other parameterizations
 <ul>
-<li>Piecewise spline, piecewise Bézier</li>
+<li>Piecewise spline, piecewise Bézier, etc.</li>
+<li>Useful for e.g.&nbsp;enforcing waypoints in the route</li>
 </ul></li>
 <li>Incorporate forecast uncertainty</li>
 </ul>
 </section>
 <section id="thank-you-for-listening" class="slide level2 smaller scrollable">
 <h2>Thank You For Listening</h2>
-<!-- :::: {.columns}
-
-::: {.column width="40%"}
-[rafael.ballester@ie.edu](rafael.ballester@ie.edu)
-:::
-
-::: {.column width="40%"}
-[manuele.leonelli@ie.edu](manuele.leonelli@ie.edu)
-:::
-
-::::
-
-<p class="text-center">
-[rafael.ballester@ie.edu](rafael.ballester@ie.edu)
-[manuele.leonelli@ie.edu](manuele.leonelli@ie.edu)
-</p> -->
 <!-- ### References -->
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-AH:12" class="csl-entry" role="listitem">
@@ -660,28 +670,20 @@ Hansen, Nikolaus, Sibylle D. Müller, and Petros Koumoutsakos. 2003. <span>“Re
 </ul>
 <p><a href="https://apply.interfolio.com/107871">https://apply.interfolio.com/107871</a></p>
 </div>
-<!-- ## Columns Test
-
-:::: {.columns}
-
-::: {.column width="40%"}
-Left column
-
-- Doing things
-- Doing things
-- Doing things
-- Doing things
-- Doing things
-- Doing things
-:::
-
-:::: -->
+</section></section>
+<section id="example-reparameterization-into-3-points" class="title-slide slide level1 center">
+<h1>Example Reparameterization into 3 Points</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="reparameterization/curve_cancun_charleston_3.png"></p>
+</figure>
+</div>
 
 <p><img src="ie_logo_color_black_text.png" class="slide-logo"></p>
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 

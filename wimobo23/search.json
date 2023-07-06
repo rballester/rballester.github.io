@@ -11,14 +11,14 @@
     "href": "slides.html#bézier-curves",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Bézier Curves",
-    "text": "Bézier Curves\n\nYields smooth curves, very expressive with few degrees of freedom\nControl points \\(\\pmb{c}_0, \\dots, \\pmb{c}_K \\in \\mathbb{R}^2\\)\n\n\\(\\pmb{c}_0\\) is the source\n\\(\\pmb{c}_K\\) is the destination\nWe leave \\(\\pmb{c}_1, \\dots, \\pmb{c}_{K-1}\\) free\n\nGeneral formula \\(f(t) = (x(t), y(t)) = \\sum_{k=0}^K \\binom{K}{k} (1-t)^{K-k} t^k \\pmb{c}_k\\)\nComputation\nWe use De Casteljau’s recurrence (Boehm and Müller 1999): \\(f(t) = \\pmb{c}_0^{(n)}\\), where \\[\\pmb{c}_k^{(i)} := \\begin{cases}\\pmb{c}_k^{(i-1)}(1-t) + \\pmb{c}_{k+1}^{(i-1)} t\\\\ \\pmb{c}_k^{(0)} := \\pmb{c}_k\\end{cases}\\]\n\nNumerically stable"
+    "text": "Bézier Curves\n\nControl points \\(\\pmb{c}_0, \\dots, \\pmb{c}_K \\in \\mathbb{R}^2\\)\n\n\\(\\pmb{c}_0\\) is the source\n\\(\\pmb{c}_K\\) is the destination\nWe leave \\(\\pmb{c}_1, \\dots, \\pmb{c}_{K-1}\\) free\n\nGeneral formula \\(f(t) = (x(t), y(t)) = \\sum_{k=0}^K \\binom{K}{k} (1-t)^{K-k} t^k \\pmb{c}_k\\)\nYields smooth curves, very expressive with few degrees of freedom\n\nComputation\n\nWe use De Casteljau’s recurrence (Boehm and Müller 1999): \\(f(t) = \\pmb{c}_0^{(n)}\\), where \\[\\pmb{c}_k^{(i)} := \\begin{cases}\\pmb{c}_k^{(i-1)}(1-t) + \\pmb{c}_{k+1}^{(i-1)} t\\\\ \\pmb{c}_k^{(0)} := \\pmb{c}_k\\end{cases}\\]\n\nNumerically stable"
   },
   {
     "objectID": "slides.html#optimizer-cma-es",
     "href": "slides.html#optimizer-cma-es",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Optimizer: CMA-ES",
-    "text": "Optimizer: CMA-ES\n\nCovariance Matrix Adaptation Evolution Strategy (Hansen, Müller, and Koumoutsakos 2003)\nEvolutionary version of gradient descent\n\nMultiple candidate solutions at each step\nCandidates are added Gaussian noise to help exploration\nDerivative-free\n\nWe start with some level \\(\\mathcal{N}(f_0, \\Sigma_0)\\) of noise\nThe distribution locally imitates the shape of the score function \\(f\\)\nSoftware: cma package\nEach generation has a whole set of routes that we evaluate at once\n\nGood for parallelization\nWe compute everything in batched form\nWe can evaluate 1’000+ routes per second"
+    "text": "Optimizer: CMA-ES\n\nCovariance Matrix Adaptation Evolution Strategy (Hansen, Müller, and Koumoutsakos 2003)\nEvolutionary version of gradient descent\n\nMultiple candidate solutions at each step (the population)\nCandidates are added Gaussian noise to help exploration (mutation)\nDerivative-free\n\nWe start with some initial solution \\(f_0\\) and noise \\(\\mathcal{N}(f_0, \\Sigma_0)\\)\nThe distribution locally imitates the shape of the score function \\(f\\)\nAt each generation, we evaluate all population individuals at once\n\nGood for parallelization\nWe compute everything in batched form\nWe can evaluate 1’000+ routes per second\n\nSoftware: Python cma package"
   },
   {
     "objectID": "slides.html#example",
@@ -32,49 +32,49 @@
     "href": "slides.html#trick-1-land-avoidance",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Trick 1: Land Avoidance",
-    "text": "Trick 1: Land Avoidance\n\nSometimes, the proposed path runs on land\nWe heavily penalize invalid segments\nBut: will not always work if there’s a local minimum\n\nExample: hourglass-shaped land\n\n\n\n\nWe have some ideas on how to solve that"
+    "text": "Trick 1: Land Avoidance\n\nSometimes, the proposed path runs on land\nWe heavily penalize any distance that is traversed on land\nBut: will not always work if there’s a local minimum\n\nExample: hourglass-shaped land\n\n\n\n\nWe have some ideas on how to solve that"
   },
   {
     "objectID": "slides.html#trick-2-reparameterization",
     "href": "slides.html#trick-2-reparameterization",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Trick 2: Reparameterization",
-    "text": "Trick 2: Reparameterization\n\nA Bézier path does not have constant speed (blue line)\nFor better visualization, we reparameterize the final path into equal-time segments\nIterative process:"
+    "text": "Trick 2: Reparameterization\n\nA Bézier path does not have constant speed (blue line)\nFor better visualization, we reparameterize the final path into equal-time segments\nIterative process, converges fast:"
   },
   {
     "objectID": "slides.html#setup",
     "href": "slides.html#setup",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Setup",
-    "text": "Setup\n\nCurrents and land:\n\nRectangular, evenly spaced grid with \\(4320 \\times 2041\\) cells (latitude \\(\\times\\) longitude)\nStatic for now (but dynamic is supported)\nQueried using linear interpolation (fast)\n\nWe pick \\(K = 10\\) Bézier control points (8 free, 2 fixed) \\(\\Rightarrow\\) 16 d.o.f.\nCMA-ES population size\n\n500 at first (exploration phase)\nThen 100 to further refine (exploitation phase)\n\nWe stop at 30’000 total function evaluations\nBézier path resolution: 200 points (199 segments)\nInitial solution \\(f_0\\): straight line\nWe take \\(\\Sigma_0 := \\textrm{diag}(\\textrm{std}(f_0) / 5)\\)"
+    "text": "Setup\n\nCurrents and land:\n\nRectangular, evenly spaced grid with \\(4320 \\times 2041\\) cells (latitude \\(\\times\\) longitude)\nStatic for now (but dynamic is supported)\nQueried using linear interpolation (fast)\n\nWe pick \\(K: = 10\\) Bézier control points (8 free, 2 fixed) \\(\\Rightarrow\\) 16 d.o.f.\nCMA-ES population size\n\n500 at first (exploration phase)\nThen 100 to further refine (exploitation phase)\n\nWe stop at 30’000 total function evaluations\nBézier path resolution: 200 points (199 segments)\nInitial solution \\(f_0\\): straight line from \\(A\\) to \\(B\\)\nWe take initial noise strength \\(\\Sigma_0 := \\textrm{diag}(\\textrm{std}(f_0) / 5)\\)"
   },
   {
     "objectID": "slides.html#cancun-rightarrow-charleston-s-3",
     "href": "slides.html#cancun-rightarrow-charleston-s-3",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Cancun \\(\\rightarrow\\) Charleston (\\(s = 3\\))",
-    "text": "Cancun \\(\\rightarrow\\) Charleston (\\(s = 3\\))\n\n\nTotal time: 116h\n\n7.35% better than geodesic route"
+    "text": "Cancun \\(\\rightarrow\\) Charleston (\\(s = 3\\))\n\n\nNavigation time: 116h\n\n7.35% better than geodesic route"
   },
   {
     "objectID": "slides.html#charleston-rightarrow-azores-s-3",
     "href": "slides.html#charleston-rightarrow-azores-s-3",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Charleston \\(\\rightarrow\\) Azores (\\(s = 3\\))",
-    "text": "Charleston \\(\\rightarrow\\) Azores (\\(s = 3\\))\n\n\nTotal time: 365h\n\n16.8% better than geodesic route"
+    "text": "Charleston \\(\\rightarrow\\) Azores (\\(s = 3\\))\n\n\nNavigation time: 365h\n\n16.8% better than geodesic route"
   },
   {
     "objectID": "slides.html#panama-rightarrow-houston-s-3",
     "href": "slides.html#panama-rightarrow-houston-s-3",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Panama \\(\\rightarrow\\) Houston (\\(s = 3\\))",
-    "text": "Panama \\(\\rightarrow\\) Houston (\\(s = 3\\))\n\n\nTotal time: 221h\n\n9% better than geodesic route"
+    "text": "Panama \\(\\rightarrow\\) Houston (\\(s = 3\\))\n\n\nNavigation time: 221h\n\n9% better than geodesic route"
   },
   {
     "objectID": "slides.html#somalia-rightarrow-myanmar-s-3",
     "href": "slides.html#somalia-rightarrow-myanmar-s-3",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Somalia \\(\\rightarrow\\) Myanmar (\\(s = 3\\))",
-    "text": "Somalia \\(\\rightarrow\\) Myanmar (\\(s = 3\\))\n\n\nTotal time: 527h\n\n4.5% better than geodesic route"
+    "text": "Somalia \\(\\rightarrow\\) Myanmar (\\(s = 3\\))\n\n\nNavigation time: 527h\n\n4.5% better than geodesic route"
   },
   {
     "objectID": "slides.html#expressiveness-of-bézier-curves",
@@ -95,7 +95,21 @@
     "href": "slides.html#convergence-for-different-seeds",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Convergence for Different Seeds",
-    "text": "Convergence for Different Seeds\nCancun \\(\\rightarrow\\) Charleston, \\(s = 3\\)\nFIXME"
+    "text": "Convergence for Different Seeds\nCharleston \\(\\rightarrow\\) Azores, \\(s = 3\\)"
+  },
+  {
+    "objectID": "slides.html#convergence-for-different-seeds-1",
+    "href": "slides.html#convergence-for-different-seeds-1",
+    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
+    "section": "Convergence for Different Seeds",
+    "text": "Convergence for Different Seeds\nCancun \\(\\rightarrow\\) Charleston, \\(s = 3\\)"
+  },
+  {
+    "objectID": "slides.html#land-is-tricky",
+    "href": "slides.html#land-is-tricky",
+    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
+    "section": "Land is Tricky",
+    "text": "Land is Tricky"
   },
   {
     "objectID": "slides.html#different-speeds-charleston-rightarrow-azores-s-3",
@@ -110,6 +124,13 @@
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Different Speeds (Charleston \\(\\rightarrow\\) Azores, \\(s = 10\\))",
     "text": "Different Speeds (Charleston \\(\\rightarrow\\) Azores, \\(s = 10\\))"
+  },
+  {
+    "objectID": "slides.html#different-speeds-charleston-rightarrow-azores-s-30",
+    "href": "slides.html#different-speeds-charleston-rightarrow-azores-s-30",
+    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
+    "section": "Different Speeds (Charleston \\(\\rightarrow\\) Azores, \\(s = 30\\))",
+    "text": "Different Speeds (Charleston \\(\\rightarrow\\) Azores, \\(s = 30\\))"
   },
   {
     "objectID": "slides.html#ground-speed-charleston-rightarrow-azores-s-3",
@@ -130,27 +151,20 @@
     "href": "slides.html#section",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "",
-    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution quickly\nOnce it finds a basin, it converges fast to its local minimum\n\nLimitations\n\nThe method struggles with complicated landscape (archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
+    "text": "Advantages\n\nCMA-ES offers good balance of exploration and exploitation\nCan find a reasonable solution \\(\\sim\\) quickly\n\nOnce it finds a basin, it converges fast to its local minimum\n\n\nLimitations\n\nThe method struggles with complicated landscape (archipelagos, rivers)\n\nA \\(K\\)-degree curve cannot do more than \\(K-1\\) turns\n\nGiven a route, it is hard to find control points that (approximately) generate it"
   },
   {
-    "objectID": "slides.html#takeaways",
-    "href": "slides.html#takeaways",
+    "objectID": "slides.html#section-1",
+    "href": "slides.html#section-1",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
-    "section": "Takeaways",
-    "text": "Takeaways\n\n“Top-down” route exploration method\nFull candidates are generated at once, then rated\nBlack-box style \\(\\Rightarrow\\) only a cost function is needed\nParallelizable and stochastic approach"
-  },
-  {
-    "objectID": "slides.html#future-work",
-    "href": "slides.html#future-work",
-    "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
-    "section": "Future Work",
-    "text": "Future Work\n\nBetter land avoidance\nOptional: add CMA-ES constraints (Arnold and Hansen 2012)\n\nExample: “we want to reach the destination during a weekday, not weekend”\n\nBenchmark other parameterizations\n\nPiecewise spline, piecewise Bézier\n\nIncorporate forecast uncertainty"
+    "section": "",
+    "text": "Takeaways\n\n“Top-down” route exploration method\nFull candidates are generated at once, then rated\nBlack-box style \\(\\Rightarrow\\) only a cost function is needed\nParallelizable and stochastic approach\n\nFuture Work\n\nBetter land avoidance\nOptional: add CMA-ES constraints (Arnold and Hansen 2012)\n\nExample: “we want to reach the destination during a weekday, not weekend”\n\nBenchmark other parameterizations\n\nPiecewise spline, piecewise Bézier, etc.\nUseful for e.g. enforcing waypoints in the route\n\nIncorporate forecast uncertainty"
   },
   {
     "objectID": "slides.html#thank-you-for-listening",
     "href": "slides.html#thank-you-for-listening",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Thank You For Listening",
-    "text": "Thank You For Listening\n\n\n\n\nArnold, Dirk V., and Nikolaus Hansen. 2012. “A (1+1)-CMA-ES for Constrained Optimisation.” In Proceedings of the 14th Annual Conference on Genetic and Evolutionary Computation, 297–304. GECCO ’12. New York, NY, USA: Association for Computing Machinery. https://doi.org/10.1145/2330163.2330207.\n\n\nBoehm, Wolfgang, and Andreas Müller. 1999. “On de Casteljau’s Algorithm.” Computer Aided Geometric Design 16 (7): 587–605. https://doi.org/https://doi.org/10.1016/S0167-8396(99)00023-0.\n\n\nHansen, Nikolaus, Sibylle D. Müller, and Petros Koumoutsakos. 2003. “Reducing the Time Complexity of the Derandomized Evolution Strategy with Covariance Matrix Adaptation (CMA-ES).” Evolutionary Computation 11 (1): 1–18.\n\n\n\n\n\nIE University is Hiring!\n\nTenure-track positions in Computer Science and Data Science\n\n\n\n\n\n\nhttps://apply.interfolio.com/107871"
+    "text": "Thank You For Listening\n\n\n\nArnold, Dirk V., and Nikolaus Hansen. 2012. “A (1+1)-CMA-ES for Constrained Optimisation.” In Proceedings of the 14th Annual Conference on Genetic and Evolutionary Computation, 297–304. GECCO ’12. New York, NY, USA: Association for Computing Machinery. https://doi.org/10.1145/2330163.2330207.\n\n\nBoehm, Wolfgang, and Andreas Müller. 1999. “On de Casteljau’s Algorithm.” Computer Aided Geometric Design 16 (7): 587–605. https://doi.org/https://doi.org/10.1016/S0167-8396(99)00023-0.\n\n\nHansen, Nikolaus, Sibylle D. Müller, and Petros Koumoutsakos. 2003. “Reducing the Time Complexity of the Derandomized Evolution Strategy with Covariance Matrix Adaptation (CMA-ES).” Evolutionary Computation 11 (1): 1–18.\n\n\n\n\n\nIE University is Hiring!\n\nTenure-track positions in Computer Science and Data Science\n\n\n\n\n\n\nhttps://apply.interfolio.com/107871"
   }
 ]
