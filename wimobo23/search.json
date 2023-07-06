@@ -18,7 +18,7 @@
     "href": "slides.html#optimizer-cma-es",
     "title": "Smooth Route Parameterization and Evolutionary Optimization for Efficient Maritime Routing",
     "section": "Optimizer: CMA-ES",
-    "text": "Optimizer: CMA-ES\n\nCovariance Matrix Adaptation Evolution Strategy (Hansen, Müller, and Koumoutsakos 2003)\nEvolutionary version of gradient descent\n\nMultiple candidate solutions at each step (the population)\nCandidates are added Gaussian noise to help exploration (mutation)\nDerivative-free\n\nWe start with some initial solution \\(f_0\\) and noise \\(\\mathcal{N}(f_0, \\Sigma_0)\\)\nThe distribution locally imitates the shape of the score function \\(f\\)\nAt each generation, we evaluate all population individuals at once\n\nGood for parallelization\nWe compute everything in batched form\nWe can evaluate 1’000+ routes per second\n\nSoftware: Python cma package"
+    "text": "Optimizer: CMA-ES\n\nCovariance Matrix Adaptation Evolution Strategy (Hansen, Müller, and Koumoutsakos 2003)\nEvolutionary version of gradient descent\n\nMultiple candidate solutions at each step (the population)\nCandidates are added Gaussian noise to help exploration (mutation)\nDerivative-free\n\nWe start with some initial solution \\(f_0\\) and noise \\(\\mathcal{N}(f_0, \\Sigma_0)\\)\nThe distribution locally imitates the shape of the score function\nAt each generation, we evaluate all population individuals at once\n\nGood for parallelization\nWe compute everything in batched form\nWe can evaluate 1’000+ routes per second\n\nSoftware: Python cma package"
   },
   {
     "objectID": "slides.html#example",
