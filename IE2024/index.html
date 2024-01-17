@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/beige.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+	<link rel="stylesheet" href="plugin/reveal-pointer/pointer.css" />
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## IE Datalab Meeting
+
+### Sensitivity Analysis and Tensor Networks
+
+### 18-01-2024
+
+Rafael Ballester-Ripoll
+
+rballester@faculty.ie.edu
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Sensitivity Analysis
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Goal
+
+- We have a general function `$f: \pmb{x} \in \mathbb{R}^{N} \mapsto y \in \mathbb{R}$`
+- For each input variable `$\pmb{x}_i \in \pmb{x}$`, we want to measure the *influence* of `$\pmb{x}_i$` on `$y$`
+	- On a **local** sense: we move `$\pmb{x}_i$` leaving all others fixed
+	- On a **global** sense: all variables move at once
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Engineering
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+We are testing concrete mixtures.
+
+
+
+Features `$\pmb{x}$`: proportion of each component, temperature, pressure, etc.
+
+
+
+Output `$y$`: strength of the concrete
+
+
+
+*Which variables are irrelevant for the concrete strength?*
+
+</div>
+</div>
+
+- Calculate indices for each `$\pmb{x}_i$`
+- If index is small `$\Rightarrow \pmb{x}_i$` has no influence `$\Rightarrow$` we can safely *freeze* it to some value
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Probabilistic Models
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+
+
+We observe symptoms `$E = \{X_1 = x_1, \dots, X_m = x_m\}$`.
+
+
+
+We care about conditional probability `$P(\text{disease} | E)$`.
+
+
+
+How much effect does each symptom `$X_i$` have on `$P$`?
+
+</div>
+</div>
+
+- Paper with Manuele [@ballester-ripollComputingSobol2022a]
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Cooperative Games
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+Agents `$X_1, \dots, X_N$` collaborate towards a goal.
+
+
+
+*How much progress is due to each?*
+
+</div>
+</div>
+
+- Let `$X_1, \dots, X_N$` be binary variables
+- The set `$\{0, 1\}^N$` describes all possible **agent coalitions**
+- Suppose we have a function `$f: \mathbb{R}^{N} \to \mathbb{R}$` giving the *value* of each coalition
+	- Example: `$f(1, \dots, 1)$` is the value achieved when all players cooperate
+- There exists a sensitivity index (the **Shapley value**) that rewards each player fairly [@shapleyValueNperson1953]
+
+`$\varphi_i = \frac{1}{\text{number of players}} \cdot \sum_{\text{coalitions including }i} \frac{\text{marginal contribution of }i\text{ to coalition}}{\text{number of coalitions of this size}}$`
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: SHAP Scores
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+
+
+Neural network `$f(\pmb{x})$` that predicts class based on features `$\pmb{x}$`
+
+
+
+*Which features determine `$f$` 's likelihood to predict a certain class?*
+
+</div>
+</div>
+
+- *SHapley Additive exPlanations* (SHAP, ~20K citations) [@lundbergUnifiedApproach2017]
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Local Sensitivity Analysis
+
+- Imagine we have an observed pair `$(\pmb{x}, y)$`
+- For each `$x_i$`, we can define an index `$\nu_i := \partial f / \partial x_i$`
+- YODO paper [@ballester-ripollYouOnly2022a]
+	- Our target is a model with learned weights `$\pmb{\theta}$`
+	- Output: a probability (e.g. chance of humanitarian catastrophe)
+	- We use PyTorch (backpropagation) to quickly evaluate the gradient w.r.t. `$\pmb{\theta}$`
+	- Result: which weights are more determinant to the output probability
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Global Sensitivity Analysis
+
+- Measures average influence of `$x_i$` while keeping other variables uncertain
+- Example: **Sobol Indices**
+	- Variance components: `$S_i := \frac{\mathrm{Var}_i \left[ \textnormal{E}_{\setminus i}[f] \right] }{\mathrm{Var}[f]}$`
+	- Total indices: `$S^{T}_i := \frac{ \textnormal{E}_{\setminus i} \left[ \mathrm{Var}_i[f] \right] }{\mathrm{Var}[f]}$`
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Interactions
+
+- Global SA can detect joint effects of two or more variables on `$f$` 's output
+- Example: first- and second-order effects in an 8-variable model
+
+<img src="Attachments/Pasted image 20240116232552.png" alt="" style="object-fit: scale-down">
+
+[@ballester-ripollHighdimensionalScalar2023]
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Calculating Global Sensitivity
+
+> All indices are expected values `$\rightarrow$` we need multidimensional integrals
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Method 1: Black-box
+
+- Evaluate `$f$` on (quasi)-random points
+-  Quasi Monte Carlo sequence example in 2D:
+
+<img src="Attachments/Pasted image 20240116092600.png" alt="" style="object-fit: scale-down">
+
+
+- Plug-and-play, can always be applied
+- Cons:
+	- Approximate
+	- Sometimes requires millions of samples to get good convergence `$\rightarrow$` slow
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Method 2: White-box
+
+- If we know how `$f$` works *on the inside*, we may get the integrals more directly
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+Linear regression `$y = \beta_0 + \sum_i \beta_i x_i$`
+
+
+
+`$\rightarrow$` For each `$\pmb{x}_i$`, its local sensitivity index is equal to `$\beta_i$`
+
+</div>
+</div>
+
+<div class="callout callout-color8">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-list" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Example
+
+</div>
+</div>
+<div class="callout-content">
+
+Tree-based models (random forest, gradient boosting)
+
+
+
+`$\rightarrow$` TreeSHAP: efficient estimation of Shapley values [@lundbergConsistentIndividualized2019]
+
+</div>
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Method 3: Surrogate Model
+
+- Machine learning setting:
+	- We don't have access to `$f$`
+	- All we have is pairs `$(\pmb{x}_k, y_k)$` for `$k = 1, \dots, K$`
+
+- Therefore:
+	1. Train `$\widehat{f}$` that approximates `$f$`
+	2. Use one of the other methods on `$\widehat{f}$`
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Tensor Networks
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Tensor Networks
+
+- Graphical way to write linear algebra operations
+
+<img src="Attachments/Pasted image 20240116220305.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Why Are They Useful?
+
+- Any (discrete) multidimensional function is a tensor
+	- A video
+	- Computer tomography
+	- A convolutional NN layer
+	- A joint probability `$p(x_1, \dots, x_n)$` of discrete variables `$X_1, \dots, X_n$`
+	- etc.
+- Problem: huge size (**curse of dimensionality**)
+- Tensor networks allow us to *decompose* tensors using less degrees of freedom
+- They are **white-box models**!
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: (Truncated) Singular Value Decomposition
+
+<img src="Attachments/Pasted image 20240117194711.png" alt="" style="object-fit: scale-down">
+
+
+- Idea: introduce a *latent variable* `$\Sigma$` capturing the matrix complexity on a few components
+- Also known as principal component analysis (PCA) and Karhunen-Loève transform
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## In Tensor Network Notation
+
+<img src="Attachments/Pasted image 20240115212811.png" alt="" style="object-fit: scale-down">
+
+
+- In Einstein notation: `$\mathbf{A}_{ij} = \mathbf{U}_{ir} \mathbf{\Sigma}_{rr} \mathbf{V}_{jr}$`
+- Repeated indices are summed away
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: 3D Tucker Format
+
+<img src="Attachments/Pasted image 20240116220120.png" alt="" style="object-fit: scale-down">
+
+
+- Like truncated SVD, but for 3 dimensions
+- Cubic saving of space
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Application: 3D Data Compression
+
+<img src="Attachments/Pasted image 20240116220208.png" alt="" style="object-fit: scale-down">
+
+
+- TTHRESH algorithm [@Ballester-Ripoll2019]
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Bayesian Network
+
+- Eight binary variables
+- Joint probability has `$2= 256$` entries
+- BN factorizes it in 8 smaller tensors `$\rightarrow 36$` entries
+
+<img src="Attachments/Pasted image 20240115222738.png" alt="" style="width: 350px; object-fit: fill">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: A Bigger BN
+
+- Joint prob. with 37 variables `$\rightarrow$` 279936 elements
+- BN has only 752 elements
+
+<img src="Attachments/Pasted image 20240117194828.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+- Network of *quantum gates* [@biamonteTensorNetworks2017]
+
+<img src="Attachments/Pasted image 20240116222800.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+<img src="Attachments/Pasted image 20240116182301.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+<img src="Attachments/Pasted image 20240117191154.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Main Operation: Tensor Contraction
+
+- Idea: remove a variable from the graph
+- Meaning: sum for all possible values of `$x_i$`
+- Known as *variable elimination* in the BN field
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Nice Uses of Tensor Contraction
+
+- Integrate a function w.r.t. a variable `$\pmb{x}_i$`
+- Find the `$L^2$` norm of a function
+- Compute expected value over a variable `$X_i$`: `$\mathbb{E}_i[f]$`
+- Find covariance between two functions
+- Decompress a tomography volume or NN layer
+- Count coloring combinations in graphs
+- Check if a Boolean formula can be satisfied, e.g. `$(p \vee \neg r) \wedge (q \vee r)$`
+- etc. etc.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## The Order of Factors Matters
+
+- Imagine we want to run the operation `$\pmb{u}\pmb{A} \pmb{B} \pmb{v}$`
+- We see it as contracting four tensors
+- Which order is best?
+	- `$((\pmb{u}^{T} \pmb{A}) \pmb{B}) \pmb{v}$`
+	- `$(\pmb{u}^{T} (\pmb{A} \pmb{B})) \pmb{v}$`
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The first option is much faster!
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Finding optimal order is NP-hard
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Tensor Networks vs. Bayesian Networks
+
+- A BN encodes conditional probabilities
+	- Each variable in terms of its parents
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->A TN can store arbitrary factors, therefore encode arbitrary functions
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->TNs support "**non-probabilistic**" operations:
+	- Dot product between functions
+	- Element-wise sum and product of functions
+	- Introduction of new dummy variables
+	- Complex entries in the potentials
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Every BN can be cast to a TN [@robevaDualityGraphical2018a]
+	- Opens the gate to apply TN-inspired algorithms to BNs, and vice-versa!
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Timeline
+
+- 1980's: BN's invented (statistics)
+- 1990's: TN's take off (quantum physics)
+- 2000's: tensor decompositions become fashionable (numerical linear algebra)
+- 2010's: all three communities meet
+- Late 2010's `$\rightarrow$` now: TN's meet machine learning
+	- Autodifferentiation
+	- Seamless GPU support
+	- Out-of-core computation
+	- Back-end agnostic software (e.g. ivy, 13K stars in GitHub)
+
+<img src="Attachments/Pasted image 20240117192715.png" alt="" style="width: 300px; object-fit: fill">
+</div></script></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+	<script src="plugin/reveal-pointer/pointer.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+	      RevealPointer,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":820,"margin":0,"controls":true,"progress":true,"slideNumber":false,"transition":"slide","transitionSpeed":"fast"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
