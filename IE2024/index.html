@@ -90,13 +90,191 @@
 
 ## IE Datalab Meeting
 
-### Sensitivity Analysis and Tensor Networks
+### Tensor Networks and Sensitivity Analysis
 
 ### 18-01-2024
 
 Rafael Ballester-Ripoll
 
 rballester@faculty.ie.edu
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Tensor Networks
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Tensor Networks
+
+- Graphical way to write linear algebra operations
+
+<img src="Attachments/Pasted image 20240116220305.png" alt="" style="object-fit: scale-down">
+
+
+- Common indices can be bound together
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: (Truncated) Singular Value Decomposition
+
+<img src="Attachments/Pasted image 20240117194711.png" alt="" style="object-fit: scale-down">
+
+
+- Idea: introduce a *latent variable* `$\Sigma$` capturing the matrix complexity on a few components
+- Also known as principal component analysis (PCA) and Karhunen-Loève transform
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## In Tensor Network Notation
+
+<img src="Attachments/Pasted image 20240115212811.png" alt="" style="object-fit: scale-down">
+
+
+- In Einstein notation: `$\mathbf{A}_{ij} = \mathbf{U}_{ir} \mathbf{\Sigma}_{rr} \mathbf{V}_{jr}$`
+- Repeated indices are summed away
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: 3D Tucker Format
+
+<img src="Attachments/Pasted image 20240116220120.png" alt="" style="object-fit: scale-down">
+
+
+- Like truncated SVD, but for 3 dimensions
+- Cubic saving of space
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Why Are They Useful?
+
+- Any (discrete) multidimensional function is a tensor
+	- A video
+	- Computer tomography
+	- A convolutional NN layer
+	- A joint probability `$p(x_1, \dots, x_n)$` of discrete variables `$X_1, \dots, X_n$`
+	- etc.
+- Problem: huge size (**curse of dimensionality**)
+- Tensor networks allow us to *decompose* tensors using less degrees of freedom
+- They are **white-box models**!
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Application: 3D Data Compression
+
+<img src="Attachments/Pasted image 20240116220208.png" alt="" style="object-fit: scale-down">
+
+
+- TTHRESH algorithm [@Ballester-Ripoll2019]
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Bayesian Network
+
+- Eight binary variables
+- Joint probability has `$2= 256$` entries
+- BN factorizes it in 8 smaller tensors `$\rightarrow 36$` entries
+
+<img src="Attachments/Pasted image 20240115222738.png" alt="" style="width: 350px; object-fit: fill">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: A Bigger BN
+
+- Joint prob. with 37 variables `$\rightarrow$` 279936 elements
+- BN has only 752 elements
+
+<img src="Attachments/Pasted image 20240117194828.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+- Network of *quantum gates* [@biamonteTensorNetworks2017]
+
+<img src="Attachments/Pasted image 20240116222800.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+<img src="Attachments/Pasted image 20240116182301.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Example: Quantum Physics
+
+<img src="Attachments/Pasted image 20240117191154.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Main Operation: Tensor Contraction
+
+- Idea: remove a variable from the graph
+- Meaning: sum for all possible values of `$x_i$`
+- Known as *variable elimination* in the BN field
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Nice Uses of Tensor Contraction
+
+- Integrate a function w.r.t. a variable `$\pmb{x}_i$`
+- Find the `$L^2$` norm of a function
+- Compute expected value over a variable `$X_i$`: `$\mathbb{E}_i[f]$`
+- Find covariance between two functions
+- Decompress a tomography volume or NN layer
+- Count coloring combinations in graphs
+- Check if a Boolean formula can be satisfied, e.g. `$(p \vee \neg r) \wedge (q \vee r)$`
+- etc. etc.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## The Order of Factors Matters
+
+- Imagine we want to run the operation `$\pmb{u}\pmb{A} \pmb{B} \pmb{v}$`
+- We see it as contracting four tensors
+- Which order is best?
+	- `$((\pmb{u}^{T} \pmb{A}) \pmb{B}) \pmb{v}$`
+	- `$(\pmb{u}^{T} (\pmb{A} \pmb{B})) \pmb{v}$`
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The first option is much faster!
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Finding optimal order is NP-hard
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Tensor Networks vs. Bayesian Networks
+
+- A BN encodes conditional probabilities
+	- Each variable in terms of its parents
+
+<img src="Attachments/Pasted image 20240118090231.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Tensor Networks vs. Bayesian Networks
+
+- A TN can store arbitrary factors, therefore encode arbitrary functions
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->TNs support "**non-probabilistic**" operations:
+	- Dot product between functions
+	- Element-wise sum and product of functions
+	- Introduction of new dummy variables
+	- Complex entries in the potentials
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Every BN can be cast to a TN [@robevaDualityGraphical2018a]
+	- Opens the gate to apply TN-inspired algorithms to BNs, and vice-versa!
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Timeline
+
+- 1980's: BN's invented (statistics)
+- 1990's: TN's take off (quantum physics)
+- 2000's: tensor decompositions become fashionable (numerical linear algebra)
+- 2010's: all three communities meet
+- Late 2010's `$\rightarrow$` now: TN's meet machine learning
+	- Autodifferentiation
+	- Seamless GPU support
+	- Out-of-core computation
+	- Back-end agnostic software (e.g. ivy, 13K stars in GitHub)
+
+<img src="Attachments/Pasted image 20240117192715.png" alt="" style="width: 300px; object-fit: fill">
 </div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
@@ -378,175 +556,7 @@ Tree-based models (random forest, gradient boosting)
 - Therefore:
 	1. Train `$\widehat{f}$` that approximates `$f$`
 	2. Use one of the other methods on `$\widehat{f}$`
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-# Tensor Networks
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Tensor Networks
-
-- Graphical way to write linear algebra operations
-
-<img src="Attachments/Pasted image 20240116220305.png" alt="" style="object-fit: scale-down">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Why Are They Useful?
-
-- Any (discrete) multidimensional function is a tensor
-	- A video
-	- Computer tomography
-	- A convolutional NN layer
-	- A joint probability `$p(x_1, \dots, x_n)$` of discrete variables `$X_1, \dots, X_n$`
-	- etc.
-- Problem: huge size (**curse of dimensionality**)
-- Tensor networks allow us to *decompose* tensors using less degrees of freedom
-- They are **white-box models**!
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: (Truncated) Singular Value Decomposition
-
-<img src="Attachments/Pasted image 20240117194711.png" alt="" style="object-fit: scale-down">
-
-
-- Idea: introduce a *latent variable* `$\Sigma$` capturing the matrix complexity on a few components
-- Also known as principal component analysis (PCA) and Karhunen-Loève transform
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## In Tensor Network Notation
-
-<img src="Attachments/Pasted image 20240115212811.png" alt="" style="object-fit: scale-down">
-
-
-- In Einstein notation: `$\mathbf{A}_{ij} = \mathbf{U}_{ir} \mathbf{\Sigma}_{rr} \mathbf{V}_{jr}$`
-- Repeated indices are summed away
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: 3D Tucker Format
-
-<img src="Attachments/Pasted image 20240116220120.png" alt="" style="object-fit: scale-down">
-
-
-- Like truncated SVD, but for 3 dimensions
-- Cubic saving of space
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Application: 3D Data Compression
-
-<img src="Attachments/Pasted image 20240116220208.png" alt="" style="object-fit: scale-down">
-
-
-- TTHRESH algorithm [@Ballester-Ripoll2019]
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: Bayesian Network
-
-- Eight binary variables
-- Joint probability has `$2= 256$` entries
-- BN factorizes it in 8 smaller tensors `$\rightarrow 36$` entries
-
-<img src="Attachments/Pasted image 20240115222738.png" alt="" style="width: 350px; object-fit: fill">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: A Bigger BN
-
-- Joint prob. with 37 variables `$\rightarrow$` 279936 elements
-- BN has only 752 elements
-
-<img src="Attachments/Pasted image 20240117194828.png" alt="" style="object-fit: scale-down">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: Quantum Physics
-
-- Network of *quantum gates* [@biamonteTensorNetworks2017]
-
-<img src="Attachments/Pasted image 20240116222800.png" alt="" style="object-fit: scale-down">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: Quantum Physics
-
-<img src="Attachments/Pasted image 20240116182301.png" alt="" style="object-fit: scale-down">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Example: Quantum Physics
-
-<img src="Attachments/Pasted image 20240117191154.png" alt="" style="object-fit: scale-down">
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Main Operation: Tensor Contraction
-
-- Idea: remove a variable from the graph
-- Meaning: sum for all possible values of `$x_i$`
-- Known as *variable elimination* in the BN field
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Nice Uses of Tensor Contraction
-
-- Integrate a function w.r.t. a variable `$\pmb{x}_i$`
-- Find the `$L^2$` norm of a function
-- Compute expected value over a variable `$X_i$`: `$\mathbb{E}_i[f]$`
-- Find covariance between two functions
-- Decompress a tomography volume or NN layer
-- Count coloring combinations in graphs
-- Check if a Boolean formula can be satisfied, e.g. `$(p \vee \neg r) \wedge (q \vee r)$`
-- etc. etc.
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## The Order of Factors Matters
-
-- Imagine we want to run the operation `$\pmb{u}\pmb{A} \pmb{B} \pmb{v}$`
-- We see it as contracting four tensors
-- Which order is best?
-	- `$((\pmb{u}^{T} \pmb{A}) \pmb{B}) \pmb{v}$`
-	- `$(\pmb{u}^{T} (\pmb{A} \pmb{B})) \pmb{v}$`
-- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The first option is much faster!
-- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Finding optimal order is NP-hard
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Tensor Networks vs. Bayesian Networks
-
-- A BN encodes conditional probabilities
-	- Each variable in terms of its parents
-- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->A TN can store arbitrary factors, therefore encode arbitrary functions
-- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->TNs support "**non-probabilistic**" operations:
-	- Dot product between functions
-	- Element-wise sum and product of functions
-	- Introduction of new dummy variables
-	- Complex entries in the potentials
-- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Every BN can be cast to a TN [@robevaDualityGraphical2018a]
-	- Opens the gate to apply TN-inspired algorithms to BNs, and vice-versa!
-</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 819.9999999999999px; width: 1920px; min-height: 819.9999999999999px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-## Timeline
-
-- 1980's: BN's invented (statistics)
-- 1990's: TN's take off (quantum physics)
-- 2000's: tensor decompositions become fashionable (numerical linear algebra)
-- 2010's: all three communities meet
-- Late 2010's `$\rightarrow$` now: TN's meet machine learning
-	- Autodifferentiation
-	- Seamless GPU support
-	- Out-of-core computation
-	- Back-end agnostic software (e.g. ivy, 13K stars in GitHub)
-
-<img src="Attachments/Pasted image 20240117192715.png" alt="" style="width: 300px; object-fit: fill">
-</div></script></section></div>
+</div></script></section><section  data-markdown><script type="text/template"></script></section></div>
     </div>
 
     <script src="dist/reveal.js"></script>
